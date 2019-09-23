@@ -37,8 +37,12 @@ fuz() {
   #  sqla "SELECT * FROM person WHERE name % '120000085000008500000RN3SGD19HYZXYEK9TM0WQW1W1F62PMI6ZDP5GH5M5VAUZKUIWL'"
   # Planning Time: 0.947 ms
   # Execution Time: 243752.916 ms
-  sqla "SELECT * FROM person WHERE name % '1200000'"
-
+  #  sqla "SELECT * FROM person WHERE name % '1200000'"
+  # Planning Time: 1.091 ms
+  # Execution Time: 928.161 ms
+  sqla "SELECT * FROM person WHERE '1200000' % ANY(STRING_TO_ARRAY(name,' '))"
+  #Planning Time: 0.505 ms
+  # Execution Time: 23787.588 ms
 }
 
 "$@"
