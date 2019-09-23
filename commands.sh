@@ -31,7 +31,7 @@ last() {
 }
 
 fuz() {
-  sqla "SELECT * FROM person WHERE name % '8500000'"
+  sqla "SELECT * FROM person WHERE name % '1100011'"
 }
 
 "$@"
