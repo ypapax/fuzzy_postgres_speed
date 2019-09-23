@@ -1,0 +1,8 @@
+version: "3"
+services:
+  postgres:
+    image: postgres
+    ports:
+      - 5439:5432/tcp
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
