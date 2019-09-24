@@ -153,11 +153,25 @@ fuz() {
   # 6376625 | immunizing correcter voicemails mango Karla's
   # 6337984 | omen's fillies dungaree's tightwad's tent's
   # 6338806 | amnesia acquiescent characterizations construes feeler
-  sqla "SELECT * FROM people WHERE metaphone=METAPHONE('bikes recuperating braved stolidest riffs', 10)"
+  #  sqla "SELECT * FROM people WHERE metaphone=METAPHONE('bikes recuperating braved stolidest riffs', 10)"
+  sqla "SELECT * FROM people WHERE metaphone % METAPHONE('bikes recuperating braved stolidest riffs', 10)"
+  #   Bitmap Heap Scan on people  (cost=2014.36..33407.35 rows=9595 width=87) (actual time=196.519..1434.978 rows=74 loops=1)
+  #   Recheck Cond: (metaphone % 'BKSRKPRTNK'::text)
+  #   Rows Removed by Index Recheck: 5653
+  #   Heap Blocks: exact=5572
+  #   ->  Bitmap Index Scan on metaphone_trigram_idx  (cost=0.00..2011.96 rows=9595 width=0) (actual time=195.275..195.280 rows=5727 loops=1)
+  #         Index Cond: (metaphone % 'BKSRKPRTNK'::text)
+  # Planning Time: 19.024 ms
+  # Execution Time: 1436.955 ms
 }
 
 update() {
   sql "UPDATE people SET metaphone=METAPHONE(name, 10)"
+}
+
+meta() {
+  sql "SELECT METAPHONE('biker recuperating braved stolidest riffs', 10)"
+  sql "SELECT METAPHONE('bikes recuperating braved stolidest riffs', 10)"
 }
 
 "$@"
