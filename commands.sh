@@ -154,7 +154,7 @@ fuz() {
   # 6337984 | omen's fillies dungaree's tightwad's tent's
   # 6338806 | amnesia acquiescent characterizations construes feeler
   #  sqla "SELECT * FROM people WHERE metaphone=METAPHONE('bikes recuperating braved stolidest riffs', 10)"
-  sqla "SELECT * FROM people WHERE metaphone % METAPHONE('bikes recuperating braved stolidest riffs', 10)"
+#  sqla "SELECT * FROM people WHERE metaphone % METAPHONE('bikes recuperating braved stolidest riffs', 10)"
   #   Bitmap Heap Scan on people  (cost=2014.36..33407.35 rows=9595 width=87) (actual time=196.519..1434.978 rows=74 loops=1)
   #   Recheck Cond: (metaphone % 'BKSRKPRTNK'::text)
   #   Rows Removed by Index Recheck: 5653
@@ -163,6 +163,63 @@ fuz() {
   #         Index Cond: (metaphone % 'BKSRKPRTNK'::text)
   # Planning Time: 19.024 ms
   # Execution Time: 1436.955 ms
+#  sqla "SELECT * FROM people WHERE metaphone %> METAPHONE('bikes recuperating braved stolidest riffs', 10)"
+#                                                               QUERY PLAN
+#--------------------------------------------------------------------------------------------------------------------------------------
+# Bitmap Heap Scan on people  (cost=2014.36..33407.35 rows=9595 width=87) (actual time=80.547..80.659 rows=5 loops=1)
+#   Recheck Cond: (metaphone %> 'BKSRKPRTNK'::text)
+#   Rows Removed by Index Recheck: 4
+#   Heap Blocks: exact=9
+#   ->  Bitmap Index Scan on metaphone_trigram_idx  (cost=0.00..2011.96 rows=9595 width=0) (actual time=80.513..80.518 rows=9 loops=1)
+#         Index Cond: (metaphone %> 'BKSRKPRTNK'::text)
+# Planning Time: 1.269 ms
+# Execution Time: 80.876 ms
+#(8 rows)
+#
+#+(./commands.sh:24): sqla():  myMac $ sql 'SELECT * FROM people WHERE metaphone %> METAPHONE('\''bikes recuperating braved stolidest riffs'\'', 10)'
+#+(./commands.sh:19): sql():  myMac $ psql -h localhost -p 5439 -U postgres -d people -c 'SELECT * FROM people WHERE metaphone %> METAPHONE('\''bikes recuperating braved stolidest riffs'\'', 10)'
+#   id    |                         name                         | metaphone
+#---------+------------------------------------------------------+------------
+#  436327 | crease recuperating clearest predisposing Freemasons | KRSRKPRTNK
+# 2171175 | Zuni's recuperating vaulter daggers prisoner         | SNSRKPRTNK
+# 3599114 | house's recuperating dangerous Kalashnikov lashing   | HSSRKPRTNK
+# 4604075 | pup's recuperating portables flip's reschedules      | PPSRKPRTNK
+# 7804322 | mess's recuperating drunker espies Enif's            | MSSRKPRTNK
+#(5 rows)
+#  sqla "SELECT * FROM people WHERE name %> 'destination vituperating diphthong miracles undivided'"
+#Bitmap Heap Scan on people  (cost=1690.36..33083.35 rows=9595 width=87) (actual time=3257.574..3257.586 rows=1 loops=1)
+#   Recheck Cond: (name %> 'destination vituperating diphthong miracles undivided'::text)
+#   Heap Blocks: exact=2
+#   ->  Bitmap Index Scan on name_trigram_idx  (cost=0.00..1687.96 rows=9595 width=0) (actual time=3257.524..3257.529 rows=2 loops=1)
+#         Index Cond: (name %> 'destination vituperating diphthong miracles undivided'::text)
+# Planning Time: 1.326 ms
+# Execution Time: 3257.799 ms
+#(7 rows)
+#
+#+(./commands.sh:24): sqla():  myMac $ sql 'SELECT * FROM people WHERE name %> '\''destination vituperating diphthong miracles undivided'\'''
+#+(./commands.sh:19): sql():  myMac $ psql -h localhost -p 5439 -U postgres -d people -c 'SELECT * FROM people WHERE name %> '\''destination vituperating diphthong miracles undivided'\'''
+#  id  |                         name                          | metaphone
+#------+-------------------------------------------------------+------------
+# 5082 | destination vituperating diphthong miracles undivided | TSTNXNFTPR
+#(1 row)
+  sqla "SELECT * FROM people WHERE name %>> 'destination vituperating diphthong miracles undivided'"
+#                                                             QUERY PLAN
+#-------------------------------------------------------------------------------------------------------------------------------------
+# Bitmap Heap Scan on people  (cost=1690.36..33083.35 rows=9595 width=87) (actual time=3251.577..3251.588 rows=1 loops=1)
+#   Recheck Cond: (name %>> 'destination vituperating diphthong miracles undivided'::text)
+#   Heap Blocks: exact=1
+#   ->  Bitmap Index Scan on name_trigram_idx  (cost=0.00..1687.96 rows=9595 width=0) (actual time=3251.527..3251.533 rows=1 loops=1)
+#         Index Cond: (name %>> 'destination vituperating diphthong miracles undivided'::text)
+# Planning Time: 1.777 ms
+# Execution Time: 3251.887 ms
+#(7 rows)
+#
+#+(./commands.sh:24): sqla():  myMac $ sql 'SELECT * FROM people WHERE name %>> '\''destination vituperating diphthong miracles undivided'\'''
+#+(./commands.sh:19): sql():  myMac $ psql -h localhost -p 5439 -U postgres -d people -c 'SELECT * FROM people WHERE name %>> '\''destination vituperating diphthong miracles undivided'\'''
+#  id  |                         name                          | metaphone
+#------+-------------------------------------------------------+------------
+# 5082 | destination vituperating diphthong miracles undivided | TSTNXNFTPR
+#(1 row)
 }
 
 update() {
