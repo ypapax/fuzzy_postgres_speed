@@ -94,7 +94,7 @@ fuz() {
   #         Rows Removed by Filter: 2831465
   # Planning Time: 0.688 ms
   # Execution Time: 799.429 ms
-  sqla "SELECT * FROM people WHERE METAPHONE(name, 10) = METAPHONE('amnesties Wilder ledge perception falconer', 10)"
+  #  sqla "SELECT * FROM people WHERE METAPHONE(name, 10) = METAPHONE('amnesties Wilder ledge perception falconer', 10)"
   #-----------------------------------------------------------------------------------------------------------------------------
   # Gather  (cost=1000.00..149360.86 rows=42504 width=55) (actual time=1170.171..1171.998 rows=1 loops=1)
   #   Workers Planned: 2
@@ -153,6 +153,11 @@ fuz() {
   # 6376625 | immunizing correcter voicemails mango Karla's
   # 6337984 | omen's fillies dungaree's tightwad's tent's
   # 6338806 | amnesia acquiescent characterizations construes feeler
+  sqla "SELECT * FROM people WHERE metaphone=METAPHONE('bikes recuperating braved stolidest riffs', 10)"
+}
+
+update() {
+  sql "UPDATE people SET metaphone=METAPHONE(name, 10)"
 }
 
 "$@"
